@@ -1,0 +1,6 @@
+/clean.py
+/test.py
+zips/
+unzipped/ 
+__pycache__/
+compiledVolumes/
