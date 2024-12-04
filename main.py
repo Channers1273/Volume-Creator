@@ -3,7 +3,6 @@ import sys
 
 if __name__ == '__main__':
 
-    # will add unput stuff here
     if len(sys.argv) < 2:
         print("Incorrect Usage")
 
@@ -30,8 +29,9 @@ if __name__ == '__main__':
         to_be_unzipped = scan_for_zip_files('/zips')
         unzip_files(to_be_unzipped)
     
-        place_in_correct_order('/unzipped/')
-        place_in_one_folder('/unzipped/', target_name)
+        place_in_correct_order('/unzipped/', target_name)
+
+        # place_in_one_folder('/unzipped/', target_name)
         zip_folder("compiledVolumes/" + target_name)
 
         zip_to_cbz("compiledVolumes/" + target_name + ".zip")

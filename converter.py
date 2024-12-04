@@ -4,8 +4,6 @@ import shutil
 
 def extract_name(file):
     path = file.split('/')
-    # num_items = len(path)
-    # index = num_items - 1
     return path[-1]
 
 def extract_name_from_directory(file, loc):
@@ -21,7 +19,7 @@ def scan_for_zip_files(directory):
     files = [os.path.join(path, file) for file in os.listdir(path) if file.endswith('.zip')]
     return files
 
-def cbz_to_zip(cbz_file_list): # this is actually where it is
+def cbz_to_zip(cbz_file_list):
     for file in cbz_file_list:
         actual_name = extract_name(file)         
         actual_name = actual_name.removesuffix('.cbz')
@@ -63,27 +61,49 @@ def get_list_of_directories(directory):
     return list_of_dirs
     
 
-def place_in_correct_order(folder_name):
-    unzipped_directory = os.getcwd() + folder_name
+def place_in_correct_order(folder_name, target_name):
 
-    list_of_dirs = get_list_of_directories(unzipped_directory)
+    unzipped_directory = os.getcwd() + folder_name # represents the directory that all the unzipped folders are
+
+    list_of_dirs = get_list_of_directories(unzipped_directory) # gets the names of all the unzipped chapters
+
+    final_collection_of_pages = create_target_folder(target_name) #creates the folder needed to store the folder the pages will go to and be zipped
 
     pages_in_first_chapter = [file for file in os.listdir(unzipped_directory + list_of_dirs[0]) if file.endswith('.jpg')]
+    pages_in_first_chapter.sort()
 
     last_page_number = len(pages_in_first_chapter)
+
     file_ext = '.' + pages_in_first_chapter[0].split('.')[1]
 
-    for index in range(len(list_of_dirs) - 1):
-        current_chapter_index = index + 1
-        pages_in_chapter = [file for file in os.listdir(unzipped_directory + list_of_dirs[current_chapter_index]) if file.endswith('.jpg')]
+    # print("\nIn " + list_of_dirs[0] + " before conversion:")
+    for page in pages_in_first_chapter: # TODO: maybe make this into it's own function?
+        old_name = unzipped_directory + list_of_dirs[0] + "/" + page
+        new_name = os.getcwd() + "/compiledVolumes/" + target_name + "/" + page
+        # print(old_name + " -> " + new_name)
+        os.rename(old_name, new_name)
+
+    for index in range(1, len(list_of_dirs)):
+        
+        # current_chapter_index = index + 1
+        pages_in_chapter = [file for file in os.listdir(unzipped_directory + list_of_dirs[index]) if file.endswith(file_ext)]
         pages_in_chapter.sort()
 
+        # print("\nIn " + list_of_dirs[index] + " before conversion:")
         for page in pages_in_chapter:
-            last_page_number = last_page_number + 1
-            old_name = unzipped_directory + list_of_dirs[current_chapter_index] + "/" + page
-            new_name = unzipped_directory + list_of_dirs[current_chapter_index] + "/"+ str(last_page_number) + file_ext
+            last_page_number += 1
+            old_name = unzipped_directory + list_of_dirs[index] + "/" + page
+            new_name = os.getcwd() + "/compiledVolumes/" + target_name + "/" + str(last_page_number) + file_ext
+            # print(old_name + " -> " + new_name)
             os.rename(old_name, new_name)
 
+def create_target_folder(target_name): 
+    cwd = os.getcwd() + "/";
+    collection = cwd + "compiledVolumes/" + target_name + "/"
+    if not os.path.exists(collection):
+        os.makedirs(collection)
+
+# may not need this funciton in final implementation
 def place_in_one_folder(folder_name, target_name):
 
     cwd = os.getcwd() + "/";
@@ -120,7 +140,6 @@ def remove_temp_files():
         os.remove(cwd + "zips/" + file)
 
     list_of_leftover_folders = get_list_of_directories(cwd + "unzipped")
-    # remove the folder that gets zipped eventually
 
     for directory in list_of_leftover_folders:
         shutil.rmtree(cwd + "unzipped/" + directory)
