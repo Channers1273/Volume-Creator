@@ -2,5 +2,6 @@
 /test.py
 zips/
 unzipped/ 
+chapters/
 __pycache__/
 compiledVolumes/
