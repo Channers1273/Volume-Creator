@@ -20,7 +20,6 @@ if __name__ == '__main__':
         chapter_list = scan_for_cbz_files('/chapters')
         copy_files(chapter_list, '/chapters', '/zips')
 
-
         # get files that will be extracted and extract to 'unzipped'
     
         to_be_converted = scan_for_cbz_files('/zips')
@@ -31,7 +30,6 @@ if __name__ == '__main__':
     
         place_in_correct_order('/unzipped/', target_name)
 
-        # place_in_one_folder('/unzipped/', target_name)
         zip_folder("compiledVolumes/" + target_name)
 
         zip_to_cbz("compiledVolumes/" + target_name + ".zip")

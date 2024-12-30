@@ -76,25 +76,20 @@ def place_in_correct_order(folder_name, target_name):
 
     file_ext = '.' + pages_in_first_chapter[0].split('.')[1]
 
-    # print("\nIn " + list_of_dirs[0] + " before conversion:")
-    for page in pages_in_first_chapter: # TODO: maybe make this into it's own function?
+    for page in pages_in_first_chapter:
         old_name = unzipped_directory + list_of_dirs[0] + "/" + page
         new_name = os.getcwd() + "/compiledVolumes/" + target_name + "/" + page
-        # print(old_name + " -> " + new_name)
         os.rename(old_name, new_name)
 
     for index in range(1, len(list_of_dirs)):
         
-        # current_chapter_index = index + 1
         pages_in_chapter = [file for file in os.listdir(unzipped_directory + list_of_dirs[index]) if file.endswith(file_ext)]
         pages_in_chapter.sort()
 
-        # print("\nIn " + list_of_dirs[index] + " before conversion:")
         for page in pages_in_chapter:
             last_page_number += 1
             old_name = unzipped_directory + list_of_dirs[index] + "/" + page
             new_name = os.getcwd() + "/compiledVolumes/" + target_name + "/" + str(last_page_number) + file_ext
-            # print(old_name + " -> " + new_name)
             os.rename(old_name, new_name)
 
 def create_target_folder(target_name): 
@@ -104,6 +99,7 @@ def create_target_folder(target_name):
         os.makedirs(collection)
 
 # may not need this funciton in final implementation
+'''
 def place_in_one_folder(folder_name, target_name):
 
     cwd = os.getcwd() + "/";
@@ -122,6 +118,7 @@ def place_in_one_folder(folder_name, target_name):
 
         for page in list_of_chapter_pages:
             shutil.move(cwd + '/unzipped/' + directory + "/" + page, collection)
+'''
 
 def zip_folder(folder_to_zip):
     cwd = os.getcwd() + "/"
